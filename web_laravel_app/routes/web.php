@@ -43,6 +43,11 @@ Route::get('/dashboard', function () {
     return view('Vendor.dashboard', compact('users')); // Pass data to view
 })->middleware('auth')->name('dashboard');
 
+// search the all data
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [User_Authentication::class, 'search_users'])->name('dashboard');
+});
+
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');

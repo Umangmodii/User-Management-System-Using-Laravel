@@ -65,6 +65,18 @@ class User_Authentication extends Controller
         return redirect('/login')->with('success', 'Registration successful! Please log in.');
     }
 
+    // Search all Users
+    public function search_users(Request $request)
+{
+    $search = $request->input('search');
+    $users = User::when($search, function ($query, $search) {
+        return $query->where('name', 'like', "%{$search}%")
+                     ->orWhere('email', 'like', "%{$search}%");
+    })->paginate(1); // Paginate results
+
+    return view('Vendor.dashboard', compact('users', 'search'));
+}
+   
     // Show All Users
 
     // Cookie Store

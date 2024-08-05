@@ -15,7 +15,7 @@
         <form action="{{ route('register') }}" method="POST">
             @csrf
 
-             <div class="container mt-5">
+    <div class="container mt-5">
         <!-- Display success message -->
         @if(session('success'))
             <div class="alert alert-success">
