@@ -105,6 +105,17 @@ return [
         ),
     ],
 
+// For PDF Users Download
+//     'providers' => [
+//     // Other Service Providers
+//     Barryvdh\DomPDF\ServiceProvider::class, // Make sure this is correctly referenced
+// ],
+
+// 'aliases' => [
+//     // Other Facades
+//     'PDF' => Barryvdh\DomPDF\Facade\Pdf::class, // Correct alias
+// ],
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver

@@ -52,7 +52,10 @@
                         <label class="form-check-label" for="remember">Remember me</label>
                     </div>
                     <br>
-                    <input type="submit" class="btn btn-primary" value="Login"> 
+
+                    <a href = "{{url('/forget_password')}}" class="link-warning"> Forget Password </a>
+
+                  &nbsp;  <input type="submit" class="btn btn-primary" value="Login"> 
                     <a href="{{ route('register') }}" class="btn btn-danger">Register</a>
                 </div>
             </div>

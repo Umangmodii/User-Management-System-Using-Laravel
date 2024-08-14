@@ -7,45 +7,38 @@
     <!-- Bootstrap CSS CDN -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             padding-top: 56px; /* Adjust based on navbar height */
         }
         .navbar {
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow */
         }
         .container {
             margin-top: 20px;
+            max-width: 90%; /* Set the container to be at most 90% of the viewport width */
+            margin-left: auto;
+            margin-right: auto;
         }
         .footer {
-            background-color: #f8f9fa; /* Matching color with navbar */
-            padding: 15px;
+            background-color: #ffc107; /* Match the navbar color */
+            padding: 10px;
             text-align: center;
-            border-top: 1px solid #e9ecef;
             margin-top: 20px;
-            color: #343a40; /* Text color matching the navbar links */
+            border-top: 1px solid #e9ecef;
+            color: #343a40; /* Text color to contrast with the background */
         }
-        .navbar {
-            background-color: #ffc107; /* Yellow background color */
-            color: #343a40; /* Text color matching the footer */
-        }
-        .navbar .nav-link {
-            color: #343a40; /* Text color matching the footer */
-        }
-        .navbar .navbar-brand {
-            color: #343a40; /* Text color matching the footer */
-        }
-        .navbar .nav-link:hover,
-        .navbar .navbar-brand:hover {
-            color: #212529; /* Darker shade on hover */
+        .table-responsive {
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-warning fixed-top">
-    <a class="navbar-brand" href="#">Web Users</a>
+    <a class="navbar-brand" href="#">User Management System</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -83,7 +76,7 @@
 
     <div class="card">
         <div class="card-body">
-            <h3 class="mb-4">Users List</h3>
+            <h3 class="mb-4">Users Management List</h3>
             <form method="GET" action="{{ url('/dashboard') }}" class="mb-3">
                 <div class="input-group">
                     <input type="text" class="form-control" id="search" name="search" placeholder="Search for users..." value="{{ isset($search) ? $search : '' }}">
@@ -92,18 +85,31 @@
                     </div>
                 </div>
             </form>
-            @if($users->isEmpty())
+            @if(isset($users) && $users->isEmpty())
                 <div class="alert alert-info" role="alert">
                     No results found.
                 </div>
             @else
-                <div class="table-container">
+                <div class="table-responsive">
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                             {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -112,6 +118,13 @@
                                 <td>{{ $user->id }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
+                                <td>
+                                    <form method="POST" action="{{ route('users.destroy', $user->id ) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger" type="submit">Delete</button>
+                                    </form>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -135,5 +148,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 </body>
 </html>

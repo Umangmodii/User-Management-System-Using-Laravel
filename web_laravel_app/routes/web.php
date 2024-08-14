@@ -6,6 +6,9 @@ use App\http\Controllers\User_Authentication;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware;
 use App\Http\Controllers\UsersDashboardController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\Admin_Dashboard;
 use App\Models\User;
 
 // Route Creates 
@@ -21,6 +24,25 @@ Route::post('/dashboard', [User_Authentication::class, 'getcookie'])->name('get.
 // Route to display all users in the dashboard
 
 Route::post('/login', [User_Authentication::class, 'signin'])->name('login.submit');
+
+// Forget_Password
+Route::get('/forget_password', function () {
+    return view('Vendor.forget_password');
+})->name('password.forget');
+
+Route::post('/forget_password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+// Route to handle the password reset link request
+Route::post('/forget_password', [ResetPasswordController::class, 'store'])
+    ->name('password.email');
+
+// Reset Password user
+// Route to show the password reset form
+Route::get('reset_password/{token}', [ResetPasswordController::class, 'create'])
+    ->name('password.reset');
+
+// Route to handle the password reset form submission
+Route::post('reset_password', [ResetPasswordController::class, 'store'])
+    ->name('password.update');
 
 // Show ALl Users Select Query
 // Route::middleware('auth')->group(function () {
@@ -48,6 +70,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [User_Authentication::class, 'search_users'])->name('dashboard');
 });
 
+// Destroy the Users Dashboard
+Route::delete('/dashboard/{id}',[User_Authentication::class,'destroy'])->name('users.destroy');
+
+// Donwload PDF
+// Route::get('/dashboard/download-pdf', [User_Authentication::class, 'downloadPDF'])->name('users.downloadPDF');
+
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
@@ -63,17 +91,35 @@ Route::get('/contact',function()
     return view('contact');
 });
 
+// Admin Login
+
+Route::get('/admin/login', [Admin_Dashboard::class, 'Admin_login'])->name('admin.login');
+Route::post('/admin/login', [Admin_Dashboard::class, 'Login'])->name('admin.login.submit');
+Route::get('/admin_dashboard', function () {
+    return view('Admin.admin_dashboard'); // Adjust according to your view location
+})->name('admin.dashboard')->middleware('auth');
 // QueryString 
 
-Route::get('/index/{id}/{name}',function($id,$name){
+// Admin Profile
 
-        return "ID is : " . $id . "  And Name is : " . $name;
-});
+// Display the admin profile page
+Route::get('/admin/profile', function() {
+    return view('Admin.profile');
+})->name('admin.profile');
 
-Route::get('/index/Student',[PostController::class ,'store']);
+// Handle the profile update
+Route::post('/profile/update', [Admin_Dashboard::class, 'update'])->name('profile.update');
 
-// Controller through Index Method
-Route::get('/index',[PostController::class, 'index']);
 
-// Foreach Result
-Route::get('/index/Data',[PostController::class,'show']);
+// Route::get('/index/{id}/{name}',function($id,$name){
+
+//         return "ID is : " . $id . "  And Name is : " . $name;
+// });
+
+// Route::get('/index/Student',[PostController::class ,'store']);
+
+// // Controller through Index Method
+// Route::get('/index',[PostController::class, 'index']);
+
+// // Foreach Result
+

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class User_Authentication extends Controller
 {
@@ -72,12 +73,36 @@ class User_Authentication extends Controller
     $users = User::when($search, function ($query, $search) {
         return $query->where('name', 'like', "%{$search}%")
                      ->orWhere('email', 'like', "%{$search}%");
-    })->paginate(1); // Paginate results
+    })->paginate(2); // Paginate results
 
     return view('Vendor.dashboard', compact('users', 'search'));
 }
+
+// Delete Particular User in Dashboard
+
+    public function destroy($id)
+    {
+        $user = User::find($id);
+
+        if($user)
+        {   
+            $user->delete();
+            return redirect()->back()->with("success","User Successfully deleted!");
+        }
+
+        else
+        {
+            return redirect()->back()->with("error","User is Not Found!");
+        }
+    }
    
-    // Show All Users
+    // Donwload PDF Users
+    // public function downloadPDF()
+    // {
+    //     $users = User::all();
+    //     $pdf = PDF::loadView('Vendor.pdf', compact('users'));
+    //     return $pdf->download('Vendor.pdf');
+    // }
 
     // Cookie Store
     public function setcookie($name, $value, $minutes = 60)
@@ -98,3 +123,5 @@ class User_Authentication extends Controller
         return response()->json(['cookie_value' => $value]);
     }
 }
+
+
