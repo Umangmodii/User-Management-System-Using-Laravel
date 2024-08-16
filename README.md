@@ -30,6 +30,8 @@ API Testing: Postman is used to test and debug API endpoints. This ensures that 
 Data Collection: Postman facilitates the collection and analysis of API responses, making it easier to validate the functionality and performance of the APIs.
 Technical Stack:
 
+<hr>
+
 <B> Backend: </B> Laravel PHP Framework  <br>
 <B> Frontend: </B>  HTML, Bootstrap, JavaScript <br>
 <B> Database: </B> MySQL (or any other supported database)  <br>
